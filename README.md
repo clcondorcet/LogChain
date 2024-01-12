@@ -28,7 +28,6 @@ It can look like this:
 ```
 GOPATH=/mnt/c/Users/cleme/go
 CHANNEL_NAME=logchannel
-FABRIC_CFG_PATH=../config/
 CHAINCODE_PATH=../../ChainCode
 ```
 
@@ -61,9 +60,11 @@ wait for the mention of `Network Ready !!`.
 Before trying to use the peer command you shoud run this (in the root folder):
 
 ```bash
-. ./env.vars
-export PATH=${PWD}/fabric-samples/bin:$PATH
-export FABRIC_CFG_PATH=${PWD}/fabric-samples/config/
+. ./env.vars ; \
+export PATH=${PWD}/fabric-samples/bin:$PATH ; \
+export FABRIC_CFG_PATH=${PWD}/fabric-samples/config/ ; \
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt ; \
+export CORE_PEER_MSPCONFIGPATH=${PWD}/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp ; \
 ```
 
 When using the peer command,
