@@ -13,13 +13,10 @@ type SmartContract struct {
 }
 
 type Asset struct {
-	ID             string `json:"ID"`
-	Hostname       string `json:"hostname"`
-	Message        string `json:"message"`
-	PID            int    `json:"PID"`
-	Process        string `json:"process"`
-	Severity       string `json:"severity"`
-	Timestamp      string `json:"timestamp"`
+	ID        string `json:"ID"`
+	Hostname  string `json:"hostname"`
+	Message   string `json:"message"`
+	Timestamp string `json:"timestamp"`
 }
 
 // timestamp hostname process[pid]: message
@@ -34,8 +31,8 @@ type Asset struct {
 
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	assets := []Asset{
-		{ID: "LOG1", Hostname: "test.test", Message: "This is the first log", PID: 435, Process: "hello", Severity: "Informational", Timestamp: "1098737410837"},
-		{ID: "LOG2", Hostname: "test.test", Message: "This is the second log", PID: 436, Process: "hello2", Severity: "Informational", Timestamp: "109873749876"},
+		{ID: "LOG1", Hostname: "test.test", Message: "This is the first log", Timestamp: "1098737410837"},
+		{ID: "LOG2", Hostname: "test.test", Message: "This is the second log", Timestamp: "109873749876"},
 	}
 
 	for _, asset := range assets {
