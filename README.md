@@ -29,6 +29,7 @@ It can look like this:
 GOPATH=/mnt/c/Users/cleme/go
 CHANNEL_NAME=logchannel
 CHAINCODE_PATH=../../ChainCode
+COLLECTION_CONFIG_PATH=../../collection_config.json
 ```
 
 All relative paths must be considered from the `fabric-samples/test-network` folder.
@@ -63,8 +64,13 @@ Before trying to use the peer command you shoud run this (in the root folder):
 . ./env.vars ; \
 export PATH=${PWD}/fabric-samples/bin:$PATH ; \
 export FABRIC_CFG_PATH=${PWD}/fabric-samples/config/ ; \
-export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt ; \
-export CORE_PEER_MSPCONFIGPATH=${PWD}/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp ; \
+export $(./setEnv.sh Org1 | xargs)
+```
+
+To switch to Org2 peer (or swith back to Org1) use this command
+
+```bash
+export $(./setEnv.sh Org2 | xargs)
 ```
 
 When using the peer command,
@@ -72,8 +78,27 @@ Always use those parameters:
 - `-C $CHANNEL_NAME`
 - `-n logContract`
 
-## Querry All
+## All functions 
 
+### Querry
+
+Base command
 ```bash
-peer chaincode query -C $CHANNEL_NAME -n logContract -c '{"Args":["GetAllAssets"]}'
+peer chaincode query -C $CHANNEL_NAME -n logContract
 ```
+
+> Example : `-c '{"Args":["GetAllAssets"]}'`
+> Example : `-c '{"Args":["ReadAsset","LOG1"]}'`
+> Example : `-c '{"Args":["AssetExists","LOG1"]}'`
+
+### Invoke
+
+Base command
+```bash
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --waitForEvent -C $CHANNEL_NAME -n logContract --peerAddresses $CORE_PEER0_ORG1_ADDRESS --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses $CORE_PEER0_ORG2_ADDRESS --tlsRootCertFiles $PEER0_ORG2_CA
+```
+
+
+
+> Example : `-c '{"Args":["AddAsset","LOG1","test.com","This is an important log !!","109877891"]}'`
+> Example : `-c '{"Args":["DeleteAsset","LOG1"]}'`

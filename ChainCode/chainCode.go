@@ -15,8 +15,8 @@ import (
 )
 
 var actions = map[string]map[string]bool{
-	"Org1MSP": {"ReadAsset": true, "AssetExists": true, "GetAllAssets": true},
-	"Org2MSP": {"GetAllAssets": true},
+	"Org1MSP": {"ReadAsset": true, "AssetExists": true, "GetAllAssets": true, "InitLedger": true, "DeleteAsset": true, "AddAsset": true},
+	"Org2MSP": {"ReadAsset": true, "AssetExists": true, "GetAllAssets": true, "InitLedger": true, "DeleteAsset": true, "AddAsset": true},
 }
 
 func CheckACL(ctx contractapi.TransactionContextInterface) error {
