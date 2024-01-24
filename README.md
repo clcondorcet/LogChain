@@ -54,6 +54,12 @@ Make sure to have set the proper environement variables.
 make run-test-network
 ```
 
+## Stop the test network
+
+```bash
+make stop-test-network
+```
+
 wait for the mention of `Network Ready !!`.
 
 # Using the test network
@@ -82,18 +88,20 @@ Always use those parameters:
 
 ### Querry
 
-Base command
+Base command :
 ```bash
 peer chaincode query -C $CHANNEL_NAME -n logContract
 ```
 
 > Example : `-c '{"Args":["GetAllAssets"]}'`
+
 > Example : `-c '{"Args":["ReadAsset","LOG1"]}'`
+
 > Example : `-c '{"Args":["AssetExists","LOG1"]}'`
 
 ### Invoke
 
-Base command
+Base command :
 ```bash
 peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --waitForEvent -C $CHANNEL_NAME -n logContract --peerAddresses $CORE_PEER0_ORG1_ADDRESS --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses $CORE_PEER0_ORG2_ADDRESS --tlsRootCertFiles $PEER0_ORG2_CA
 ```
@@ -101,4 +109,5 @@ peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.exa
 
 
 > Example : `-c '{"Args":["AddAsset","LOG1","test.com","This is an important log !!","109877891"]}'`
+
 > Example : `-c '{"Args":["DeleteAsset","LOG1"]}'`
