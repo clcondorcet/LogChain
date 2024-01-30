@@ -106,8 +106,6 @@ Base command :
 peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --waitForEvent -C $CHANNEL_NAME -n logContract --peerAddresses $CORE_PEER0_ORG1_ADDRESS --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses $CORE_PEER0_ORG2_ADDRESS --tlsRootCertFiles $PEER0_ORG2_CA
 ```
 
-
-
 > Example : `-c '{"Args":["AddAsset","LOG1","test.com","This is an important log !!","109877891"]}'`
 
 > Example : `-c '{"Args":["DeleteAsset","LOG1"]}'`
