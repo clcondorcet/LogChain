@@ -21,7 +21,7 @@ def send_post_request(line):
 
     now = time.time()
 
-    data = "{\"function\":\"AddAsset\",\"args\":[\"" + str(timestamp) + "\",\"cleme\",\"" + line + "\",\"" + str(timestamp_str) + "\"]}"
+    data = "{\"function\":\"AddAsset\",\"args\":[\"cleme\",\"" + line + "\",\"" + str(round(int(timestamp))) + "\"]}"
     
     response = requests.post(url, data=data)
     
@@ -76,5 +76,5 @@ def main(file_path):
 
 if __name__ == "__main__":
     # Replace 'your_file.txt' with the actual file path you want to read
-    file_path = 'd:/dev/EngineeringProj/LogChain/tests/fail2ban.log'
+    file_path = './fail2ban.log'
     main(file_path)
