@@ -20,8 +20,9 @@ def make_http_request():
 
 def write_to_file(data, file_path):
     try:
+        sorted_data = sorted(data, key=lambda x: x.get("timestamp", 0))
         with open(file_path, 'w') as file:
-             for item in data:
+             for item in sorted_data:
                 file.write(str(item["message"]) + '\n')
         print(f"Données écrites avec succès dans le fichier : {file_path}")
     except Exception as e:
@@ -29,7 +30,7 @@ def write_to_file(data, file_path):
 
 def main():
     # Spécifiez le chemin du fichier où vous souhaitez enregistrer les données
-    file_path = './output.log'
+    file_path = './tests/output.log'
 
     now = time.time()
 

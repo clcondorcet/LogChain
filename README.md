@@ -86,7 +86,7 @@ Always use those parameters:
 
 ## All functions 
 
-### Querry
+### Query
 
 Base command :
 ```bash
@@ -95,9 +95,11 @@ peer chaincode query -C $CHANNEL_NAME -n logcontract
 
 > Example : `-c '{"Args":["GetAllAssets"]}'`
 
-> Example : `-c '{"Args":["ReadAsset","LOG1"]}'`
+> Example : `-c '{"Args":["GetAssetByRange","1706704300","1706704522"]}'`
 
-> Example : `-c '{"Args":["AssetExists","LOG1"]}'`
+> Example : `-c '{"Args":["ReadAsset","87256cd1e75c4a60dc6f569742c6302a3bfaf011"]}'`
+
+> Example : `-c '{"Args":["AssetExists","87256cd1e75c4a60dc6f569742c6302a3bfaf011"]}'`
 
 ### Invoke
 
@@ -106,6 +108,8 @@ Base command :
 peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --waitForEvent -C $CHANNEL_NAME -n logcontract --peerAddresses $CORE_PEER0_ORG1_ADDRESS --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses $CORE_PEER0_ORG2_ADDRESS --tlsRootCertFiles $PEER0_ORG2_CA
 ```
 
-> Example : `-c '{"Args":["AddAsset","LOG1","test.com","This is an important log !!","109877891"]}'`
+> Example : `-c '{"Args":["AddAsset","test.com","This is an important log !!","1706704322"]}'`
 
-> Example : `-c '{"Args":["DeleteAsset","LOG1"]}'`
+> Example : `-c '{"Args":["AddAssets","[{\"hostname\":\"test.com\",\"message\":\"This is an important log !!\",\"timestamp\":\"1706704322\"},{\"hostname\":\"test.com\",\"message\":\"This is another important log !!\",\"timestamp\":\"1706704325\"}]"]}'`
+
+> Example : `-c '{"Args":["DeleteAsset","87256cd1e75c4a60dc6f569742c6302a3bfaf011"]}'`
