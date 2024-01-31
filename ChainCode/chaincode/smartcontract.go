@@ -1,8 +1,10 @@
 package chaincode
 
 import (
+	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
@@ -23,8 +25,8 @@ const collection_name = "logs"
 
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	// assets := []Asset{
-	// 	{ID: "LOG1", Hostname: "test.test", Message: "This is the first log", Timestamp: "1098737410837"},
-	// 	{ID: "LOG2", Hostname: "test.test", Message: "This is the second log", Timestamp: "109873749876"},
+	// 	{Hostname: "test.test", Message: "This is the first log", Timestamp: "1098737410837"},
+	// 	{Hostname: "test.test", Message: "This is the second log", Timestamp: "109873749876"},
 	// }
 
 	// for _, asset := range assets {
@@ -156,6 +158,67 @@ func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 	return assets, nil
 }
 
+/*
+{
+	"selector": {
+		"$and": [
+      {
+        "timestamp": {"$gte": low}
+      },
+      {
+        "timestamp": {"$lte": high}
+      }
+    ]
+	},
+	"sort": [{"timestamp": "asc"}],
+	"use_index": ["_design/timestampIndexDoc","timestampIndex"]
+}
+
+{
+	"Args":[
+		"QueryAssets",
+		"{
+			\"selector\":{
+				\"docType\":\"asset\",
+				\"owner\":\"tom\"
+			},
+			\"use_index\":[
+				\"_design/indexOwnerDoc\",
+				\"indexOwner\"
+			]
+		}"
+	]
+}
+
+{"selector":{"$and":[{"timestamp":{"$gte": low}},{"timestamp":{"$lte":high}}]},"sort":[{"timestamp": "asc"}],"use_index":["timestampIndexDoc","timestampIndex"]}
+,\"fields\": [\"_id\",\"hostname\",\"message\",\"timestamp\"]
+*/
+
+func (s *SmartContract) GetAssetByRange(ctx contractapi.TransactionContextInterface, low string, high string) ([]*Asset, error) {
+	resultsIterator, err := ctx.GetStub().GetPrivateDataQueryResult(collection_name, "{\"selector\":{\"$and\":[{\"timestamp\":{\"$gte\":\""+low+"\"}},{\"timestamp\":{\"$lte\":\""+high+"\"}}]}}")
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	var assets []*Asset
+	for resultsIterator.HasNext() {
+		queryResponse, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		var asset Asset
+		err = json.Unmarshal(queryResponse.Value, &asset)
+		if err != nil {
+			return nil, err
+		}
+		assets = append(assets, &asset)
+	}
+
+	return assets, nil
+}
+
 // func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface, id string) error {
 // 	exists, err := s.AssetExists(ctx, id)
 // 	if err != nil {
@@ -203,7 +266,11 @@ func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface,
 // 	return ctx.GetStub().PutState(id, assetJSON)
 // }
 
-func (s *SmartContract) AddAsset(ctx contractapi.TransactionContextInterface, id string, hostname string, message string, timestamp string) error {
+func (s *SmartContract) AddAsset(ctx contractapi.TransactionContextInterface, hostname string, message string, timestamp string) error {
+	data_id := []byte(timestamp + hostname + message)
+	sha := sha1.Sum(data_id)
+	id := fmt.Sprintf("%x", sha[:])
+
 	exists, err := s.AssetExists(ctx, id)
 	if err != nil {
 		return err
@@ -224,4 +291,27 @@ func (s *SmartContract) AddAsset(ctx contractapi.TransactionContextInterface, id
 	}
 
 	return ctx.GetStub().PutPrivateData(collection_name, id, assetJSON)
+}
+
+type Input_log struct {
+	Hostname  string `json:"hostname"`
+	Message   string `json:"message"`
+	Timestamp string `json:"timestamp"`
+}
+
+func (s *SmartContract) AddAssets(ctx contractapi.TransactionContextInterface, data_in string) error {
+	var data []Input_log
+	err := json.Unmarshal([]byte(strings.ReplaceAll(data_in, "'", "\"")), &data)
+	if err != nil {
+		return err
+	}
+
+	for _, d := range data {
+		err = s.AddAsset(ctx, d.Hostname, d.Message, d.Timestamp)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
