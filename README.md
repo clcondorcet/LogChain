@@ -82,7 +82,7 @@ export $(./setEnv.sh Org2 | xargs)
 When using the peer command,
 Always use those parameters:
 - `-C $CHANNEL_NAME`
-- `-n logContract`
+- `-n logcontract`
 
 ## All functions 
 
@@ -90,7 +90,7 @@ Always use those parameters:
 
 Base command :
 ```bash
-peer chaincode query -C $CHANNEL_NAME -n logContract
+peer chaincode query -C $CHANNEL_NAME -n logcontract
 ```
 
 > Example : `-c '{"Args":["GetAllAssets"]}'`
@@ -103,7 +103,7 @@ peer chaincode query -C $CHANNEL_NAME -n logContract
 
 Base command :
 ```bash
-peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --waitForEvent -C $CHANNEL_NAME -n logContract --peerAddresses $CORE_PEER0_ORG1_ADDRESS --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses $CORE_PEER0_ORG2_ADDRESS --tlsRootCertFiles $PEER0_ORG2_CA
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile $ORDERER_CA --waitForEvent -C $CHANNEL_NAME -n logcontract --peerAddresses $CORE_PEER0_ORG1_ADDRESS --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses $CORE_PEER0_ORG2_ADDRESS --tlsRootCertFiles $PEER0_ORG2_CA
 ```
 
 > Example : `-c '{"Args":["AddAsset","LOG1","test.com","This is an important log !!","109877891"]}'`

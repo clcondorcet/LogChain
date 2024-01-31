@@ -55,7 +55,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	contract = network.GetContract("logContract")
+	contract = network.GetContract("logcontract")
 
 	fmt.Println("Hyperledger linked! Now starting http server ...")
 
@@ -96,8 +96,8 @@ func querry(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("querry called and run !!")
-	fmt.Println(string(result))
+	//fmt.Println("querry called and run !!")
+	//fmt.Println(string(result))
 	w.Write(result)
 }
 
@@ -124,7 +124,7 @@ func invoke(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("invoke called and run !!")
+	//fmt.Println("invoke called and run !!")
 	//fmt.Println(string(result))
 	w.Write(result)
 }
