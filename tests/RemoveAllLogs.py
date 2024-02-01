@@ -7,7 +7,7 @@ import time
 url_invoke = "http://localhost:3333/invoke"
 
 def make_http_request():
-    url = "http://localhost:3333/querry"
+    url = "http://localhost:3333/query"
     payload = {
         "function": "GetAllAssets",
         "args": []

@@ -3,7 +3,7 @@ import json
 import time
 
 def make_http_request():
-    url = "http://localhost:3333/querry"
+    url = "http://localhost:3333/query"
     payload = {
         "function": "GetAllAssets",
         "args": []

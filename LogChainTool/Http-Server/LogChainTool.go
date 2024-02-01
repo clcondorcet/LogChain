@@ -60,7 +60,7 @@ func main() {
 	fmt.Println("Hyperledger linked! Now starting http server ...")
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/querry", querry)
+	mux.HandleFunc("/query", query)
 	mux.HandleFunc("/invoke", invoke)
 
 	err = http.ListenAndServe(":3333", mux)
@@ -73,7 +73,7 @@ type data struct {
 	Args     []string `json:"args"`
 }
 
-func querry(w http.ResponseWriter, r *http.Request) {
+func query(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		fmt.Printf("could not read body: %s\n", err)
@@ -96,7 +96,7 @@ func querry(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//fmt.Println("querry called and run !!")
+	//fmt.Println("query called and run !!")
 	//fmt.Println(string(result))
 	w.Write(result)
 }

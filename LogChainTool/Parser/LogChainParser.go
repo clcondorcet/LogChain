@@ -132,8 +132,6 @@ func tailFile(filePath string, lines chan string, readAll bool) {
 		return
 	}
 
-	scanner := bufio.NewScanner(file)
-
 	for {
 		select {
 		case event, ok := <-watcher.Events:
@@ -142,6 +140,7 @@ func tailFile(filePath string, lines chan string, readAll bool) {
 			}
 			if event.Op&fsnotify.Write == fsnotify.Write {
 				// Lorsque le fichier est modifié, lisez les nouvelles lignes
+				scanner := bufio.NewScanner(file)
 				for scanner.Scan() {
 					lines <- scanner.Text()
 				}
