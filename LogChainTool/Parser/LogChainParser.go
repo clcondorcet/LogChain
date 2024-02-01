@@ -83,10 +83,14 @@ func main() {
 	for line := range lines {
 		currentTime := time.Now()
 		timestampSeconds := currentTime.Unix()
-		_, err := contract.SubmitTransaction("AddAsset", *hostname, line, strconv.FormatInt(timestampSeconds, 10))
-		if err != nil {
-			fmt.Printf("Failed to submit transaction: %s\n", err)
-		}
+		go submit(*contract, "AddAsset", *hostname, line, strconv.FormatInt(timestampSeconds, 10))
+	}
+}
+
+func submit(contract gateway.Contract, function string, args ...string) {
+	_, err := contract.SubmitTransaction(function, args...)
+	if err != nil {
+		fmt.Printf("Failed to submit transaction: %s\n", err)
 	}
 }
 
