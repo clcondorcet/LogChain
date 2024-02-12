@@ -1,5 +1,13 @@
 # LogChain
- Blockchain for logs. Engineering project
+
+This project is a proof of concept.
+
+The goal was to test if a "LogChain" (a way to store logs in a blockchain) is possible and viable.
+We used HyperLedger Fabric to support the blockchain.
+
+The SmartContract ("ChainCode") is coded under the `./ChainCode` folder.
+
+This project is not intended for production, the informations below help to install and test the hyperledger network locally.
 
 # Inital Setup
 
@@ -113,3 +121,38 @@ peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.exa
 > Example : `-c '{"Args":["AddAssets","[{\"hostname\":\"test.com\",\"message\":\"This is an important log !!\",\"timestamp\":\"1706704322\"},{\"hostname\":\"test.com\",\"message\":\"This is another important log !!\",\"timestamp\":\"1706704325\"}]"]}'`
 
 > Example : `-c '{"Args":["DeleteAsset","87256cd1e75c4a60dc6f569742c6302a3bfaf011"]}'`
+
+## LogChainTools
+
+For the moment, no automation is available to setup the configuration to every environment.
+To use the tools you must change every paths in the `./LogChainTool/network-config.yaml`.
+
+The linux binaries are already built but you can build your own versions with go build command.
+
+### HTTP-Server
+
+The HTTP-Server is a http server that listen to port 5000 locally.
+There are two routes available:
+- `/querry` to use the querry features on the network.
+- `/invoke` to use the invoke features on the network.
+
+### Parser
+
+This tool allows to tail a file of your choice and insert new lines directly in the LogChain.
+You can run it like this:
+```shell
+./LogChainParser -file <path> -hostname <Your hostname> [-readall]
+```
+
+The `-readall` flag will allow the parser to read the whole file and insert each lines one by one in the LogChain (not recommended, use the tests python scripts to have better performances).
+
+## Tests
+
+The tests python scripts allow you to test the LogChain.
+The scripts uses the HTTP-Server Tool to work.
+
+Available scripts:
+- `GetAllLogs.py` Read all the logs in the LogChain and output them in the `output.log` file.
+- `InsertLogFileTest.py` Insert file line by line in the LogChain (you may need to modify the timestamp reading function to your log format), the insertion is divided into workers to have better performances.
+- `InsertLogFileTestV2.py` Same as the previous script but uses another function of the SmartContract that can accept multiples lines. You can define the number of workers and lines to be inserted (better performances than v1 and allow more transactions per seconds in the LogChain).
+- `RemoveAllLogs.py` Remove all the logs in the LogChain. This is really innefficient, recreating the network is less time consuming when having a lot of logs in the LogChain.
